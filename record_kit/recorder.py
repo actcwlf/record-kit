@@ -1,6 +1,7 @@
 import pathlib
 import time
 import os
+import warnings
 
 
 def check_suffix(file_name):
@@ -33,24 +34,34 @@ class Recorder(LogBase):
             timestamp = time.strftime('%Y%m%d-%H%M%S', time.localtime(time.time()))
             file_name += '-' + timestamp
         self.record_name = self.records_dir.joinpath(file_name + '.md')
+        self.meta_added = False
         super().__init__(self.record_name)
         self.append_line(f"# {file_name}")
 
-    def begin_meta(self):
+    def _begin_meta(self):
         s = "## Meta\n" + \
             "| key | value |\n" + \
             "| :-: |  :-:  |\n"
         self.append(s)
 
-    def begin_data(self):
+    def _begin_data(self):
         s = "## Data"
         self.append_line(s)
 
-    def write_meta(self, key, value):
-        s = f"| {key} | {str(value)} |"
-        self.append_line(s)
+    def write_meta(self, meta_info):
+        if self.meta_added:
+            warnings.warn('Meta information can only be added once')
+            return
+
+        self.meta_added = True
+        self._begin_meta()
+        meta_info = meta_info.__dict__
+        for key, value in meta_info.items():
+            s = f"| {key} | {str(value)} |"
+            self.append_line(s)
 
     def write_header(self, *args):
+        self._begin_data()
         length = len(args)
         args = map(str, args)
         s = " | ".join(args)
@@ -59,7 +70,7 @@ class Recorder(LogBase):
         self.append_line(s)
         self.append_line(s2)
 
-    def write_data(self, *args):
+    def write_data_line(self, *args):
         args = map(str, args)
         s = " | ".join(args)
         s = "| " + s + " |"

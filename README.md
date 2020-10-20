@@ -1,5 +1,5 @@
 # record-kit
-A simple record toolkit for experiment.
+A simple record toolkit generating human readable data record for experiment.
 
 ##  Installation
 ```bash
@@ -36,6 +36,6 @@ Initialize a Recorder instance
 
 #### `Recorder.write_meta(dict_like_object)`
 
-####`Recorder.write_header(*args)`
-####`Recorder.write_data_line(*args)`
+#### `Recorder.write_header(*args)`
+#### `Recorder.write_data_line(*args)`
 

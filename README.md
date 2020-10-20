@@ -26,3 +26,16 @@ recorder.write_data_line(1, 0.08, 0.9)
 ```
 
 generated record in `./records/record-timestamp.md`
+
+![record_example](https://github.com/actcwlf/record-kit/blob/main/docs/record.png)
+
+## API
+#### `Recorder(file_name='record', records_dir='./records', with_timestamp=True)`
+
+Initialize a Recorder instance
+
+#### `Recorder.write_meta(dict_like_object)`
+
+####`Recorder.write_header(*args)`
+####`Recorder.write_data_line(*args)`
+

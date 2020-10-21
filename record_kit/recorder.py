@@ -35,6 +35,7 @@ class Recorder(LogBase):
             file_name += '-' + timestamp
         self.record_name = self.records_dir.joinpath(file_name + '.md')
         self.meta_added = False
+        self.header_added = False
         super().__init__(self.record_name)
         self.append_line(f"# {file_name}")
 
@@ -61,6 +62,11 @@ class Recorder(LogBase):
             self.append_line(s)
 
     def write_header(self, *args):
+        if self.header_added:
+            warnings.warn('Table header can only be added once')
+            return
+        self.header_added = True
+
         self._begin_data()
         length = len(args)
         args = map(str, args)

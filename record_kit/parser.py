@@ -2,7 +2,8 @@ import markdown
 import pandas as pd
 from html.parser import HTMLParser
 import numpy as np
-
+import pathlib
+from .recorder import Recorder
 
 class HTMLRecordParser(HTMLParser):
     def __init__(self):
@@ -33,19 +34,24 @@ class HTMLRecordParser(HTMLParser):
 
 
 class Record:
-    def __init__(self, record_name):
-        self.record_name = record_name
+    def __init__(self, record_path):
+        if isinstance(record_path, Recorder):
+            self.record_path = record_path.record_name
+        else:
+            self.record_path = pathlib.Path(record_path)
         self.text = None
         self.html = None
         self.meta = {}
         self.data = None
         self._load_record()
 
+    def reload(self):
+        self._load_record()
+
     def _load_record(self):
-        with open(self.record_name, "r") as f:
+        with self.record_path.open("r") as f:
             self.text = f.read()
         parser = HTMLRecordParser()
-
 
         self.html_text = markdown.markdown(self.text)
         parser.feed(self.html_text)

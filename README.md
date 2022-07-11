@@ -1,5 +1,5 @@
 # record-kit
-A simple record toolkit generating human-readable data record in experiment.
+A simple record toolkit generating human-readable data record in experiments.
 
 ##  Installation
 ```bash

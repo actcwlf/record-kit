@@ -19,6 +19,7 @@ def train_ml_model():
     for i in range(2):
         epoch, loss, acc = i, 0.1, 0.5
 ```
+
 Using record-kit to track these generated data is quite easy:
 ```python
 from record_kit import Recorder, Record             # use Recorder to track experiment data

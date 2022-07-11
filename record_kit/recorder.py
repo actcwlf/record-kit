@@ -65,7 +65,7 @@ class Recorder(LogBase):
         else:
             meta_info = meta_info.__dict__
         for key, value in meta_info.items():
-            s = f"| {key} | {str(value)} | {type(0.01).__name__} |"
+            s = f"| {key} | {str(value)} | {type(value).__name__} |"
             self.append_line(s)
 
     def set_header(self, *args):

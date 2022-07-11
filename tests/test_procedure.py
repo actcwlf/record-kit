@@ -20,7 +20,8 @@ def test_create_record(records_dir):
 
     recorder.set_meta({
         'learning_rate': 0.01,
-        'epoch': 100
+        'epoch': 100,
+        'model': 'mlp',
     })
     recorder.set_header('epoch', 'loss', 'acc')
     recorder.add_data(0, 0.1, 0.5)
@@ -30,4 +31,5 @@ def test_create_record(records_dir):
     assert 'learning_rate' in record.meta.keys()
     assert record.meta['learning_rate'] == 0.01
     assert record.meta['epoch'] == 100
+    assert record.meta['model'] == 'mlp'
     assert record.data['epoch'][0] == 0

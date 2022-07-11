@@ -33,6 +33,14 @@ class HTMLRecordParser(HTMLParser):
             self.data_string = data
 
 
+def parse_token(type_str, value):
+    if type_str == 'int':
+        return int(value)
+    elif type_str == 'float':
+        return float(value)
+    else:
+        return value
+
 class Record:
     def __init__(self, record_path):
         if isinstance(record_path, Recorder):
@@ -62,9 +70,10 @@ class Record:
         table = table_string.split("\n")
         def parse_line(line):
             line = line.split('|')
-            words = line[1:-1]
-            words = list(map(lambda x:x[1:-1], words))
-            return words
+            tokens = line[1:-1]
+            tokens = list(map(lambda x:x[1:-1], tokens))
+            tokens[1] = parse_token(tokens[-1], tokens[1])
+            return tokens
         header = parse_line(table[0])
         body = map(parse_line, table[2:])
         return header, body
@@ -84,8 +93,8 @@ class Record:
         #     df = df.append(data, ignore_index=True)
         self.data = df
 
-    def get_meta(self):
-        pass
-
-    def get_data(self):
-        pass
+    # def get_meta(self):
+    #     pass
+    #
+    # def get_data(self):
+    #     pass

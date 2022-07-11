@@ -1,5 +1,5 @@
 # record-kit
-A simple record toolkit generating human readable data record for experiment.
+A simple record toolkit generating human-readable data record in experiment.
 
 ##  Installation
 ```bash
@@ -15,7 +15,7 @@ parser = argparse.ArgumentParser()
 parser.add_argument('--lr', type=float)
 args = parser.parse_args()
 
-def train_ml_model(args):
+def train_ml_model():
     for i in range(2):
         epoch, loss, acc = i, 0.1, 0.5
 ```
@@ -29,16 +29,16 @@ parser.add_argument('--lr', type=float, default=0.1)
 args = parser.parse_args()
 
 
-def train_ml_model(args, recorder):
+def train_ml_model():
     for i in range(2):
         epoch, loss, acc = i, 0.1, 0.5
-        recorder.write_data_line(epoch, loss, acc)   # save data
+        recorder.add_data(epoch, loss, acc)   # save data
 
 
 # init Recorder
-recorder = Recorder()                                # init Recorder
-recorder.write_meta(args)                            # save arguments like hyperparameters
-recorder.write_header('epoch', 'loss', 'acc')        # specify table header
+recorder = Recorder()                              # init Recorder
+recorder.set_meta(args)                            # save arguments like hyperparameters
+recorder.set_header('epoch', 'loss', 'acc')        # specify table header
 
 # parse record
 record = Record(recorder) # or record = Record('path/to/record')
@@ -62,11 +62,11 @@ A typical record includes two sections `Meta` and `Data`.
 # record-20201020-154912
 ## Meta
 | key | value |
-| :-: |  :-:  |
+| :---: |  :---:  |
 | lr | 0.1 |
 ## Data
 | epoch | loss | acc |
-| :-: | :-: | :-: |
+| :---: | :---: | :---: |
 | 0 | 0.1 | 0.5 |
 | 1 | 0.08 | 0.9 |
 ```
@@ -75,16 +75,16 @@ A typical record includes two sections `Meta` and `Data`.
 #### `Recorder(file_name='record', records_dir='./records', with_timestamp=True)`
 Initialize a Recorder instance
 
-#### `Recorder.write_meta(dict_like_object)`
+#### `Recorder.set_meta(dict_like_object)`
 Add meta info to the record. Note meta info can only be added once. 
 You may use `dict` or `argparse.Namespace`(return type of `parser.parse_args()`) as its parameter.
 
-#### `Recorder.write_header(*args)`
+#### `Recorder.set_header(*args)`
 Specify header of data table in Data section. The header can only be added once. 
 
-#### `Recorder.write_data_line(*args)`
-Add a data line to the table in Data section.
-The number of parameters in should be consistent with `Recorder.write_header(*args)`
+#### `Recorder.add(*args)`
+Add a data line to the table in `Data` section.
+The number of parameters in should be consistent with `Recorder.set_header(*args)`
 
 ### `Record`
 #### `Record(Recorder_or_path_str)`

@@ -46,8 +46,8 @@ print(record.meta)
 print(record.data)
 ```
 output
-```bahs
-{'lr': '0.1'}
+```bash
+{'lr': 0.1}
    epoch  loss  acc
 0    0.0  0.10  0.5
 1    1.0  0.08  0.9
@@ -61,9 +61,9 @@ A typical record includes two sections `Meta` and `Data`.
 ```markdown
 # record-20201020-154912
 ## Meta
-| key | value |
-| :---: |  :---:  |
-| lr | 0.1 |
+| key | value | type |
+| :---: | :---: | :---: |
+| lr | 0.1 | float |
 ## Data
 | epoch | loss | acc |
 | :---: | :---: | :---: |

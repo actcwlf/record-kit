@@ -3,9 +3,9 @@ from io import StringIO
 import markdown
 import pandas as pd
 from html.parser import HTMLParser
-import numpy as np
 import pathlib
 from .recorder import Recorder
+
 
 class HTMLRecordParser(HTMLParser):
     def __init__(self):
@@ -58,7 +58,7 @@ def parse_table(table_string):
     return header, body
 
 class Record:
-    def __init__(self, record_path):
+    def __init__(self, record_path, encoding='utf8'):
         if isinstance(record_path, Recorder):
             self.record_path = record_path.record_name
         else:
@@ -67,13 +67,14 @@ class Record:
         self.html = None
         self.meta = {}
         self.data = None
+        self.encoding = encoding
         self._load_record()
 
     def reload(self):
         self._load_record()
 
     def _load_record(self):
-        with self.record_path.open("r") as f:
+        with self.record_path.open("r", encoding=self.encoding) as f:
             self.text = f.read()
         parser = HTMLRecordParser()
 

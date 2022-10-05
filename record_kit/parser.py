@@ -45,6 +45,9 @@ def parse_token(type_str, value):
 
 def parse_table(table_string):
     table = table_string.split("\n")
+    sep = ','
+    if table_string.find(',') >= 0:
+        sep = '|'
 
     def parse_line(line):
         line = line.split('|')
@@ -55,7 +58,7 @@ def parse_table(table_string):
 
     header = parse_line(table[0])
     body = map(parse_line, table[2:])
-    return header, body
+    return header, body, sep
 
 class Record:
     def __init__(self, record_path, encoding='utf8'):
@@ -97,17 +100,17 @@ class Record:
         return header, body
 
     def _parse_meta(self, meta_string):
-        header, body = parse_table(meta_string)
+        header, body, _ = parse_table(meta_string)
         for item in body:
             self.meta[item[0]] = parse_token(item[2],item[1])
 
     def _parse_data(self, data_string):
-        header, body = parse_table(data_string)
+        header, body, sep = parse_table(data_string)
         data = list(body)
-        data = [','.join(seq) for seq in data]
-        data_str = ','.join(header) + '\n' + '\n'.join(data)
+        data = [sep.join(seq) for seq in data]
+        data_str = sep.join(header) + '\n' + '\n'.join(data)
         csv_str = StringIO(data_str)
-        data = pd.read_csv(csv_str)
+        data = pd.read_csv(csv_str, sep=sep)
         self.data = data
 
     # def get_meta(self):

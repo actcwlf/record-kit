@@ -2,18 +2,18 @@ import pytest
 
 import tempfile
 from record_kit import Recorder, Record
-import argparse
+import pathlib
 
 
 @pytest.fixture
 def records_dir():
     r_d = tempfile.TemporaryDirectory()
-    yield r_d.name
+    yield pathlib.Path(r_d.name)
     r_d.cleanup()
 
 
 def test_create_record(records_dir):
-    print(records_dir)
+    # print(records_dir)
 
     recorder = Recorder(records_dir=records_dir)
 
@@ -36,7 +36,7 @@ def test_create_record(records_dir):
 
 
 def test_hybrid_data_type(records_dir):
-    print(records_dir)
+    # print(records_dir)
 
     recorder = Recorder(records_dir=records_dir)
 
@@ -56,3 +56,23 @@ def test_hybrid_data_type(records_dir):
     assert record.meta['epoch'] == 100
     assert record.meta['model'] == 'mlp'
     assert record.data['data'][0] == 'set1'
+
+sample_content = """
+# record-20221003-182442
+## Meta
+| key | value | type |
+| :---: |  :---: | :---: |
+| lambda1 | 5 | int |
+| lambda2 | 1 | int |
+
+## Data
+| data_set  | kernel_comp |
+| :---: | :---: | 
+| ACSF1 | None |
+| ACSF1 | (113, 163, 23) |
+"""
+
+def test_full(records_dir):
+    with open(records_dir.joinpath('sample.md'), 'w') as f:
+        f.write(sample_content)
+    record = Record(records_dir.joinpath('sample.md'))
